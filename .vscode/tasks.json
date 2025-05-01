@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Abrir Windows Terminal aqui",
+      "type": "shell",
+      "command": "wt",
+      "args": ["-d", "${workspaceFolder}"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
