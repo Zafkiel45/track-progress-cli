@@ -20,7 +20,8 @@ export interface GoalProgress {
 };
 
 export interface GoalFailure {
-  failure: number;
-  last_failure: Date;
-  progress: 0;
+  name: string;
+  failure?: number;
+  last_failure?: Date;
+  progress?: 0;
 };

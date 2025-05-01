@@ -2,7 +2,7 @@ import './database/migrations/database.migrations';
 import { createNewGoalController } from './controllers/createGoal.controllers';
 import { getDate } from './utils/getDate';
 import { showGoals } from './scripts/showGoals';
-import { updateGoalByNameController } from './controllers/updateGoal.controllers';
+import { updateGoalByNameController, updateGoalFailureByNameController } from './controllers/updateGoal.controllers';
 
 const args = process.argv.slice(2);
 
@@ -15,10 +15,15 @@ switch(args[0]) {
     });
   break
   case 'show-goals':
-    console.log('========== Started the process 🟢 ==========')
+    console.log('Started the process 🟢')
     showGoals();
   break 
   case 'update-goal':
     updateGoalByNameController({name: args[1]})
   break
-}
+  case 'add-failure':
+    updateGoalFailureByNameController({name: args[1]});
+  break
+  default:
+    console.log('the command does not exist');
+};
