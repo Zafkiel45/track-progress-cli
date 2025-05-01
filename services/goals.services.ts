@@ -1,6 +1,7 @@
 import type { GoalFailure, GoalProgress, NewGoal } from "../database/models/goal";
 import { database } from "../database/config/database.config";
 import { getDate } from "../utils/getDate";
+import type { GoalDelete } from "../types/goal.types";
 
 export function createNewGoal({name, target, created_at}: NewGoal) {
   const query = database.prepare(`
@@ -46,4 +47,9 @@ export function updateGoalFailureService({ name }: GoalFailure) {
       name: name
     })
   })();
+};
+
+export function deleteGoalService({name}: GoalDelete) {
+  const query = database.prepare(`DELETE FROM goals WHERE name = @name`);
+  database.transaction(() => query.run({name: name}))();
 };
