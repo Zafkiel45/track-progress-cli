@@ -15,7 +15,8 @@ export interface Goal {
 }; 
 
 export interface GoalProgress {
-  progress: number; 
+  name: string;
+  progress?: number; 
 };
 
 export interface GoalFailure {
