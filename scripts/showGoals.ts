@@ -28,7 +28,7 @@ function generateBar(name: string, progress: number, target: number) {
   
   greenBar += '\x1b[0m'
   const whiteBars = `\x1b[38;5;22m${'█'.repeat(Math.max(0, 40 - percentageInBarIdx))}\x1b[0m`;
-  const summaryBar = ` ${progressPercentage.toFixed(2)}% | ${progress}/${target}`;
+  const summaryBar = ` ${(progressPercentage.toFixed(2).padEnd(6, ' '))}% | ${progress}/${target}`;
   const barName = `\x1b[33m${name.padEnd(20, ' ')}\x1b[0m`;
 
   console.log(barName + greenBar + whiteBars + summaryBar);

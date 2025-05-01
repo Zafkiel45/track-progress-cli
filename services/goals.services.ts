@@ -18,14 +18,20 @@ export function createNewGoal({name, target, created_at}: NewGoal) {
 };
 
 export function updateGoalProgressService({ name }: GoalProgress) {
-  const getOldProgress = database.query(`SELECT progress FROM goals WHERE name = @name`);
-  const oldProgresss = getOldProgress.get({name: name});
+  const getOldProgress = database.query(`SELECT progress,target FROM goals WHERE name = @name`);
+  const oldProgresss = getOldProgress.get({name: name}) as {progress: number, target: number};
+
+  if(oldProgresss.progress >= oldProgresss.target) {
+    console.log('Awesome! This goal is already finished 🔥');
+    return;
+  };
+
   const query = database.prepare(`UPDATE goals SET progress = @progress WHERE name = @name`);
   
   database.transaction(() => {
     query.run({
       name: name,
-      progress: (oldProgresss as {progress:number}).progress + 1, 
+      progress: oldProgresss.progress + 1, 
     });
   })();
 };
