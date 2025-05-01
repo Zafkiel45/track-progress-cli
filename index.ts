@@ -1,8 +1,7 @@
 import './database/migrations/database.migrations';
-import { createNewGoalController } from './controllers/createGoal.controllers';
 import { getDate } from './utils/getDate';
 import { showGoals } from './scripts/showGoals';
-import { updateGoalByNameController, updateGoalFailureByNameController } from './controllers/updateGoal.controllers';
+import { createNewGoalController, updateGoalByNameController, updateGoalFailureByNameController } from './controllers/goals.controllers';
 
 const args = process.argv.slice(2);
 
