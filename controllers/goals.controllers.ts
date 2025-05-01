@@ -1,12 +1,12 @@
 import type { GoalProgress, GoalFailure, NewGoal } from "../database/models/goal";
-import { createNewGoal, updateGoalByNameService, updateGoalFailureByNameService } from "../services/goals.services";
+import { createNewGoal, updateGoalFailureService, updateGoalProgressService } from "../services/goals.services";
 
 export function updateGoalByNameController({ name }: GoalProgress) {
   if(typeof name !== 'string') {
     throw new Error(`Check the @name of goal. Make sure it is a string`);
   };
 
-  updateGoalByNameService({name: name});
+  updateGoalFailureService({name: name});
   return;
 };
 
@@ -15,7 +15,7 @@ export function updateGoalFailureByNameController({ name }: GoalFailure) {
     throw new Error(`Check the @name of goal. Make sure it is a string`);
   };
 
-  updateGoalFailureByNameService({name: name});
+  updateGoalFailureService({name: name});
   
   console.log('Failure updated. Please, try again to achieve the goal 🔥')
   return;

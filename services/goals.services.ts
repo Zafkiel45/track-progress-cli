@@ -16,12 +16,10 @@ export function createNewGoal({name, target, created_at}: NewGoal) {
   })()
 };
 
-export function updateGoalByNameService({ name }: GoalProgress) {
+export function updateGoalProgressService({ name }: GoalProgress) {
   const getOldProgress = database.query(`SELECT progress FROM goals WHERE name = @name`);
   const oldProgresss = getOldProgress.get({name: name});
   const query = database.prepare(`UPDATE goals SET progress = @progress WHERE name = @name`);
-  
-  console.log(oldProgresss);
   
   database.transaction(() => {
     query.run({
@@ -31,7 +29,7 @@ export function updateGoalByNameService({ name }: GoalProgress) {
   })();
 };
 
-export function updateGoalFailureByNameService({ name }: GoalFailure) {
+export function updateGoalFailureService({ name }: GoalFailure) {
   const getPreviusFailure = database.query(`SELECT failures FROM goals WHERE name = @name`);
   const previousFailure = getPreviusFailure.get({name: name});
   const query = database.prepare(`
