@@ -14,7 +14,6 @@ switch(args[0]) {
     });
   break
   case 'show-goals':
-    console.log('Started the process 🟢')
     showGoals();
   break 
   case 'update-goal':
