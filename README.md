@@ -48,3 +48,11 @@ The capacity to incorporate failures into a goal is a distinct possibility.  The
 bun run index.ts add-failure test
 ```
 The `test` will be reset and the `failure` column incremented in `1`.
+
+# Updating a goal:
+
+You can increment the progress of goal in `1` with the following command:
+```bash
+bun run index.ts update-goal test
+```
+When you view the bar, the data will be updated. 
