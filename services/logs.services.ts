@@ -29,12 +29,10 @@ export function showHistoryService(type: string, from?: string, to?: string) {
   if(typeof from === 'undefined' || typeof to === 'undefined') {
     if(type === 'all') {
       const query = database.query('SELECT type,target,datetime FROM history');
-      const logs  = query.all({type: type}) as History[];
+      const logs  = query.all() as History[];
 
       iterateOverLogs(logs);
-    } else {
-
-    }
+    } 
   };
 };
 
