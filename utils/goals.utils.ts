@@ -1,3 +1,3 @@
-export function formatGoalName(name: string): string {
+export function formatTextForDatabase(name: string): string {
   return name.toLowerCase().trim();
 };

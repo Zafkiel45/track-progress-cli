@@ -1,5 +1,5 @@
 import type { GoalFailure, GoalProgress, NewGoal } from "../database/models/goal";
-import { formatGoalName } from "../utils/goals.utils";
+import { formatTextForDatabase } from "../utils/goals.utils";
 import { database } from "../database/config/database.config";
 import { getDate, getDatetime } from "../utils/getDate";
 import type { GoalDelete } from "../types/goal.types";
@@ -12,19 +12,19 @@ export function createNewGoal({name, target, created_at}: NewGoal) {
 
   database.transaction(() => {
     query.run({
-      name: formatGoalName(name),
+      name: formatTextForDatabase(name),
       target: target,
       created_at: String(created_at)
     });
   })();
 
-  registerLogService('Create', name, getDatetime());
+  registerLogService('create', name, getDatetime());
 };
 
 export function updateGoalProgressService({ name }: GoalProgress) {
   const getOldProgress = database.query(`SELECT progress,target FROM goals WHERE name = @name`);
   const oldProgresss = getOldProgress.get({
-    name: formatGoalName(name)
+    name: formatTextForDatabase(name)
   }) as {progress: number, target: number};
 
   if(oldProgresss.progress >= oldProgresss.target) {
@@ -36,17 +36,17 @@ export function updateGoalProgressService({ name }: GoalProgress) {
   
   database.transaction(() => {
     query.run({
-      name: formatGoalName(name),
+      name: formatTextForDatabase(name),
       progress: oldProgresss.progress + 1, 
     });
   })();
 
-  registerLogService('Update', name, getDatetime());
+  registerLogService('update', name, getDatetime());
 };
 
 export function updateGoalFailureService({ name }: GoalFailure) {
   const getPreviusFailure = database.query(`SELECT failures FROM goals WHERE name = @name`);
-  const previousFailure = getPreviusFailure.get({name: formatGoalName(name)});
+  const previousFailure = getPreviusFailure.get({name: formatTextForDatabase(name)});
   const query = database.prepare(`
     UPDATE goals
     SET failures = @failure, last_failure = @lastFailure, progress = @progress 
@@ -58,15 +58,15 @@ export function updateGoalFailureService({ name }: GoalFailure) {
       failure: (previousFailure as {failures: number}).failures + 1,
       lastFailure: getDate(),
       progress: 0,
-      name: formatGoalName(name)
+      name: formatTextForDatabase(name)
     })
   })();
 
-  registerLogService('Failure', name, getDatetime());
+  registerLogService('failure', name, getDatetime());
 };
 
 export function deleteGoalService({name}: GoalDelete) {
   const query = database.prepare(`DELETE FROM goals WHERE name = @name`);
-  database.transaction(() => query.run({name: formatGoalName(name)}))();
-  registerLogService('Delete', name, getDatetime());
+  database.transaction(() => query.run({name: formatTextForDatabase(name)}))();
+  registerLogService('delete', name, getDatetime());
 };
