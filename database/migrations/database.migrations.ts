@@ -12,3 +12,12 @@ database.run(`
   )  
 `);
 
+database.run(`
+  CREATE TABLE IF NOT EXISTS history (
+    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL, 
+    target TEXT NOT NULL, 
+    datetime TEXT NOT NULL
+  ) 
+`)
+

@@ -1,8 +1,9 @@
 import type { GoalFailure, GoalProgress, NewGoal } from "../database/models/goal";
 import { formatGoalName } from "../utils/goals.utils";
 import { database } from "../database/config/database.config";
-import { getDate } from "../utils/getDate";
+import { getDate, getDatetime } from "../utils/getDate";
 import type { GoalDelete } from "../types/goal.types";
+import { registerLogService } from "./logs.services";
 
 export function createNewGoal({name, target, created_at}: NewGoal) {
   const query = database.prepare(`
@@ -15,7 +16,9 @@ export function createNewGoal({name, target, created_at}: NewGoal) {
       target: target,
       created_at: String(created_at)
     });
-  })()
+  })();
+
+  registerLogService('Create', name, getDatetime());
 };
 
 export function updateGoalProgressService({ name }: GoalProgress) {
@@ -37,6 +40,8 @@ export function updateGoalProgressService({ name }: GoalProgress) {
       progress: oldProgresss.progress + 1, 
     });
   })();
+
+  registerLogService('Update', name, getDatetime());
 };
 
 export function updateGoalFailureService({ name }: GoalFailure) {
@@ -56,9 +61,12 @@ export function updateGoalFailureService({ name }: GoalFailure) {
       name: formatGoalName(name)
     })
   })();
+
+  registerLogService('Failure', name, getDatetime());
 };
 
 export function deleteGoalService({name}: GoalDelete) {
   const query = database.prepare(`DELETE FROM goals WHERE name = @name`);
   database.transaction(() => query.run({name: formatGoalName(name)}))();
+  registerLogService('Delete', name, getDatetime());
 };
