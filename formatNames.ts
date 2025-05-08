@@ -6,7 +6,7 @@
   All new notes will be created formatted. 
 */ 
 import { database } from "./database/config/database.config";
-import { formatGoalName } from "./utils/goals.utils";
+import { formatTextForDatabase } from "./utils/goals.utils";
 
 interface names {
   name: string;
@@ -24,7 +24,7 @@ interface names {
       for(let name of item) {
         update.run({
           name: name,
-          updated: formatGoalName(name)
+          updated: formatTextForDatabase(name)
         })
       };
     });

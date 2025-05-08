@@ -1,5 +1,6 @@
 import { database } from "../database/config/database.config";
 import type { History } from "../types/history.types";
+import { formatTextForDatabase } from "../utils/goals.utils";
 import { iterateOverLogs } from "../utils/interateOverLogs";
 
 export function registerLogService(type: string, target: string, datetime: string) {
@@ -27,12 +28,19 @@ export function registerLogService(type: string, target: string, datetime: strin
 
 export function showHistoryService(type: string, from?: string, to?: string) {
   if(typeof from === 'undefined' || typeof to === 'undefined') {
-    if(type === 'all') {
+    if(formatTextForDatabase(type) === 'all') {
       const query = database.query('SELECT type,target,datetime FROM history');
       const logs  = query.all() as History[];
 
       iterateOverLogs(logs);
-    } 
-  };
+    } else {
+      const query = database.query(`
+        SELECT type,target,datetime FROM history WHERE type = @type  
+      `);
+      const logs  = query.all({type: formatTextForDatabase(type)}) as History[];
+
+      iterateOverLogs(logs);
+    }
+  } 
 };
 
