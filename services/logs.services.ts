@@ -41,6 +41,39 @@ export function showHistoryService(type: string, from?: string, to?: string) {
 
       iterateOverLogs(logs);
     }
-  } 
+  } else if(typeof to === 'string' && typeof from === 'string') {
+    if(formatTextForDatabase(type) === 'all') {
+      const query = database.query(`
+        SELECT type,target,datetime 
+        FROM history 
+        WHERE datetime 
+        BETWEEN @from AND @to
+      `);
+
+      const logs  = query.all({
+        to: formatTextForDatabase(to), 
+        from: formatTextForDatabase(from)
+      }) as History[];
+
+      iterateOverLogs(logs);
+    } else {
+      const query = database.query(`
+        SELECT type,target,datetime 
+        FROM history 
+        WHERE datetime 
+        BETWEEN @from AND @to AND type = @type
+      `);
+
+      const logs  = query.all({
+        to: formatTextForDatabase(to), 
+        from: formatTextForDatabase(from),
+        type: formatTextForDatabase(type),
+      }) as History[];
+
+      iterateOverLogs(logs);
+    }
+  } else {
+    console.log('❌ You forgot to pass two dates. Example "2025-07-08 17:20:00"');
+  }
 };
 

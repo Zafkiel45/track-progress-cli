@@ -28,7 +28,7 @@ switch(args[0]) {
     deleteGoalController({name: args[1]});
   break 
   case 'history':
-    showHistoryController(args[1] as historyType);
+    showHistoryController(args[1] as historyType, args[2], args[3]);
   break
   default:
     console.log('the command does not exist');
