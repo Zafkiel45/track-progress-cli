@@ -36,14 +36,7 @@ export function showHistoryService(type: string, from?: string, to?: string) {
 
       iterateOverLogs(logs);
     } else {
-      const query = database.query(`
-        SELECT type,target,datetime FROM history WHERE type = @type  
-      `);
-      const logs = query.all({
-        type: formatTextForDatabase(type),
-      }) as History[];
-
-      iterateOverLogs(logs);
+      showHistoryByType(type);
     }
   } else if (typeof to === "string" && typeof from === "string") {
     if (formatTextForDatabase(type) === "all") {
@@ -82,3 +75,17 @@ export function showHistoryService(type: string, from?: string, to?: string) {
     );
   }
 }
+
+export function showHistoryByType(type: string) {
+  try {
+    const query = database.query(`
+      SELECT type,target,datetime 
+      FROM history WHERE type = @type  
+    `);
+
+    const logs = query.all({type: formatTextForDatabase(type)}) as History[];
+    iterateOverLogs(logs);
+  } catch (err) {
+    console.error(err);
+  };
+};
