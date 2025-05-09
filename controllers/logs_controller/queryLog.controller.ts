@@ -3,11 +3,14 @@ import type { historyType } from "../../types/history.types";
 
 export function showHistoryController(type: historyType, from?: string, to?: string) {
   try {
-    if(!type) {
-      throw new Error(`
-        Please, pass some type how the first argument. 
-        Suported types: "all", "update", "failure", "create", "delete"  
-      `.trim());
+    const logTypes = ['all', 'update', 'create', 'delete', 'failure'];
+
+    if(!logTypes.includes(type)) {
+      throw new Error(
+        "The type provided is not accepted." +
+        "Please, use some type suported:" +
+        "'all', 'update', 'create', 'delete', 'failure'"
+      );
     };
 
     if(!from || !to) {
@@ -16,6 +19,10 @@ export function showHistoryController(type: historyType, from?: string, to?: str
       showAllHistoryByIntervalService(type, from, to);
     }
   } catch(err) {
-    console.error(err);
-  }
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error('Unknown error occurred');
+    }
+  };
 };
