@@ -64,6 +64,12 @@ export function showHistoryByTypeService(type: string) {
     `);
 
     const logs = query.all({ type: type }) as History[];
+
+    if(logs.length === 0) {
+      console.log('🟠 There are not records of history with the type: ', type);
+      return;
+    };
+
     iterateOverLogs(logs);
   } catch (err) {
     console.error(err);
@@ -80,6 +86,14 @@ export function showAllHistoryByIntervalService(from: string, to: string) {
     `);
 
     const logs = query.all({to: to, from: from}) as History[];
+
+    if(logs.length === 0) {
+      console.log('🟠 There are not records of history with this interval:');
+      console.log('🟠 - check if the intervals are correct.');
+      console.log('🟠 - check if the interval exists with "history all"');
+      return;
+    };
+
     iterateOverLogs(logs);
   } catch (err) {
     console.error(err);
@@ -96,6 +110,10 @@ export function showHistoryByTypeIntervalService(from: string, to: string, type:
   `);
 
   const logs = query.all({to: to, from: from,type: type,}) as History[];
+  if(logs.length === 0) {
+    console.log('🟠 There are not records of history with the type and interval: ', type,'from', from, 'to', to);
+    return;
+  };
   iterateOverLogs(logs);
   } catch(err) {
     console.error(err);
@@ -106,7 +124,10 @@ export function showAllHistoryService() {
   try {
     const query = database.query("SELECT type,target,datetime FROM history");
     const logs = query.all() as History[];
-
+    if(logs.length === 0) {
+      console.log('🟠 There are not records of history');
+      return;
+    };
     iterateOverLogs(logs);
   } catch (err) {
     console.error(err);
