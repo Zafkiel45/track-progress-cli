@@ -29,22 +29,30 @@ export function registerLogService(
 }
 
 export function showHistoryService(type: string, from?: string, to?: string) {
-  if (typeof from === "undefined" || typeof to === "undefined") {
-    if (formatTextForDatabase(type) === "all") {
-      showAllHistoryService();
-    } else {
-      showHistoryByTypeService(type);
-    }
-  } else if (typeof to === "string" && typeof from === "string") {
-    if (formatTextForDatabase(type) === "all") {
-      showAllHistoryByIntervalService(from, to);
-    } else {
-      showHistoryByTypeIntervalService(from, to, type);
-    };
+  const historyType = formatTextForDatabase(type);
+  const fromInterval = formatTextForDatabase(from || '');
+  const toInterval = formatTextForDatabase(to || '');
+
+  const intervalsIsString = 
+    typeof toInterval === "string" && 
+    typeof fromInterval === "string";
+
+  const intervalsIsNotEmpty = 
+    toInterval !== ''.trim() && 
+    fromInterval !== ''.trim();
+
+  const intervalsAreUndefined = 
+    typeof toInterval === "undefined" && 
+    typeof fromInterval === "undefined";
+
+  if (intervalsAreUndefined || !intervalsIsNotEmpty) {
+    if (historyType === "all") {showAllHistoryService()} 
+    else {showHistoryByTypeService(historyType)};
+  } else if (intervalsIsString && intervalsIsNotEmpty) {
+    if (historyType === "all") {showAllHistoryByIntervalService(fromInterval, toInterval)} 
+    else { showHistoryByTypeIntervalService(fromInterval, toInterval, historyType)};
   } else {
-    console.log(
-      '❌ You forgot to pass two dates. Example "2025-07-08 17:20:00"'
-    );
+    console.log('❌ You forgot to pass two dates. Example "2025-07-08 17:20:00"');
   };
 };
 
@@ -55,7 +63,7 @@ export function showHistoryByTypeService(type: string) {
       FROM history WHERE type = @type  
     `);
 
-    const logs = query.all({ type: formatTextForDatabase(type) }) as History[];
+    const logs = query.all({ type: type }) as History[];
     iterateOverLogs(logs);
   } catch (err) {
     console.error(err);
@@ -71,11 +79,7 @@ export function showAllHistoryByIntervalService(from: string, to: string) {
       BETWEEN @from AND @to
     `);
 
-    const logs = query.all({
-      to: formatTextForDatabase(to),
-      from: formatTextForDatabase(from),
-    }) as History[];
-
+    const logs = query.all({to: to, from: from}) as History[];
     iterateOverLogs(logs);
   } catch (err) {
     console.error(err);
@@ -91,12 +95,7 @@ export function showHistoryByTypeIntervalService(from: string, to: string, type:
     BETWEEN @from AND @to AND type = @type
   `);
 
-  const logs = query.all({
-    to: formatTextForDatabase(to),
-    from: formatTextForDatabase(from),
-    type: formatTextForDatabase(type),
-  }) as History[];
-
+  const logs = query.all({to: to, from: from,type: type,}) as History[];
   iterateOverLogs(logs);
   } catch(err) {
     console.error(err);
