@@ -36,23 +36,11 @@ export function showHistoryService(type: string, from?: string, to?: string) {
 
       iterateOverLogs(logs);
     } else {
-      showHistoryByType(type);
+      showHistoryByTypeService(type);
     }
   } else if (typeof to === "string" && typeof from === "string") {
     if (formatTextForDatabase(type) === "all") {
-      const query = database.query(`
-        SELECT type,target,datetime 
-        FROM history 
-        WHERE datetime 
-        BETWEEN @from AND @to
-      `);
-
-      const logs = query.all({
-        to: formatTextForDatabase(to),
-        from: formatTextForDatabase(from),
-      }) as History[];
-
-      iterateOverLogs(logs);
+      showAllHistoryByIntervalService(from, to);
     } else {
       const query = database.query(`
         SELECT type,target,datetime 
@@ -76,14 +64,34 @@ export function showHistoryService(type: string, from?: string, to?: string) {
   }
 }
 
-export function showHistoryByType(type: string) {
+export function showHistoryByTypeService(type: string) {
   try {
     const query = database.query(`
       SELECT type,target,datetime 
       FROM history WHERE type = @type  
     `);
 
-    const logs = query.all({type: formatTextForDatabase(type)}) as History[];
+    const logs = query.all({ type: formatTextForDatabase(type) }) as History[];
+    iterateOverLogs(logs);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function showAllHistoryByIntervalService(from: string, to: string) {
+  try {
+    const query = database.query(`
+      SELECT type,target,datetime 
+      FROM history 
+      WHERE datetime 
+      BETWEEN @from AND @to
+    `);
+
+    const logs = query.all({
+      to: formatTextForDatabase(to),
+      from: formatTextForDatabase(from),
+    }) as History[];
+
     iterateOverLogs(logs);
   } catch (err) {
     console.error(err);
