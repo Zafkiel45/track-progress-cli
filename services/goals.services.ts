@@ -3,7 +3,7 @@ import { formatTextForDatabase } from "../utils/goals.utils";
 import { database } from "../database/config/database.config";
 import { getDate, getDatetime } from "../utils/getDate";
 import type { GoalDelete } from "../types/goal.types";
-import { registerLogService } from "./logs.services";
+import { registerLogService } from "./logs_service/registerLog.services";
 
 export function createNewGoal({name, target, created_at}: NewGoal) {
   const query = database.prepare(`

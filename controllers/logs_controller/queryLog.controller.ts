@@ -1,5 +1,5 @@
-import { showHistoryService } from "../services/logs.services";
-import type { historyType } from "../types/history.types";
+import { showAllHistoryByIntervalService, showHistoryService } from '../../services/logs_service/queryLog.services';
+import type { historyType } from "../../types/history.types";
 
 export function showHistoryController(type: historyType, from?: string, to?: string) {
   try {
@@ -10,7 +10,11 @@ export function showHistoryController(type: historyType, from?: string, to?: str
       `.trim());
     };
 
-    showHistoryService(type, from, to);
+    if(!from || !to) {
+      showHistoryService(type);
+    } else {
+      showAllHistoryByIntervalService(type, from, to);
+    }
   } catch(err) {
     console.error(err);
   }

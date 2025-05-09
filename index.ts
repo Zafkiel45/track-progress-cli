@@ -2,7 +2,7 @@ import './database/migrations/database.migrations';
 import { getDate } from './utils/getDate';
 import { showGoals } from './scripts/showGoals';
 import { createNewGoalController, deleteGoalController, updateGoalByNameController, updateGoalFailureByNameController } from './controllers/goals.controllers';
-import { showHistoryController } from './controllers/history.controller';
+import { showHistoryController } from './controllers/logs_controller/queryLog.controller';
 import type { historyType } from './types/history.types';
 
 const args = process.argv.slice(2);
