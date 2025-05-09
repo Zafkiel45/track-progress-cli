@@ -31,10 +31,7 @@ export function registerLogService(
 export function showHistoryService(type: string, from?: string, to?: string) {
   if (typeof from === "undefined" || typeof to === "undefined") {
     if (formatTextForDatabase(type) === "all") {
-      const query = database.query("SELECT type,target,datetime FROM history");
-      const logs = query.all() as History[];
-
-      iterateOverLogs(logs);
+      showAllHistoryService();
     } else {
       showHistoryByTypeService(type);
     }
@@ -102,6 +99,17 @@ export function showHistoryByTypeIntervalService(from: string, to: string, type:
 
   iterateOverLogs(logs);
   } catch(err) {
+    console.error(err);
+  };
+};
+
+export function showAllHistoryService() {
+  try {
+    const query = database.query("SELECT type,target,datetime FROM history");
+    const logs = query.all() as History[];
+
+    iterateOverLogs(logs);
+  } catch (err) {
     console.error(err);
   };
 };
