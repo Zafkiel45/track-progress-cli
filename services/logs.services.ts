@@ -42,27 +42,14 @@ export function showHistoryService(type: string, from?: string, to?: string) {
     if (formatTextForDatabase(type) === "all") {
       showAllHistoryByIntervalService(from, to);
     } else {
-      const query = database.query(`
-        SELECT type,target,datetime 
-        FROM history 
-        WHERE datetime 
-        BETWEEN @from AND @to AND type = @type
-      `);
-
-      const logs = query.all({
-        to: formatTextForDatabase(to),
-        from: formatTextForDatabase(from),
-        type: formatTextForDatabase(type),
-      }) as History[];
-
-      iterateOverLogs(logs);
-    }
+      showHistoryByTypeIntervalService(from, to, type);
+    };
   } else {
     console.log(
       '❌ You forgot to pass two dates. Example "2025-07-08 17:20:00"'
     );
-  }
-}
+  };
+};
 
 export function showHistoryByTypeService(type: string) {
   try {
@@ -75,8 +62,8 @@ export function showHistoryByTypeService(type: string) {
     iterateOverLogs(logs);
   } catch (err) {
     console.error(err);
-  }
-}
+  };
+};
 
 export function showAllHistoryByIntervalService(from: string, to: string) {
   try {
@@ -94,6 +81,27 @@ export function showAllHistoryByIntervalService(from: string, to: string) {
 
     iterateOverLogs(logs);
   } catch (err) {
+    console.error(err);
+  };
+};
+
+export function showHistoryByTypeIntervalService(from: string, to: string, type: string) {
+  try {
+   const query = database.query(`
+    SELECT type,target,datetime 
+    FROM history 
+    WHERE datetime 
+    BETWEEN @from AND @to AND type = @type
+  `);
+
+  const logs = query.all({
+    to: formatTextForDatabase(to),
+    from: formatTextForDatabase(from),
+    type: formatTextForDatabase(type),
+  }) as History[];
+
+  iterateOverLogs(logs);
+  } catch(err) {
     console.error(err);
   };
 };
