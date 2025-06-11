@@ -1,9 +1,11 @@
 import './database/migrations/database.migrations';
 import { getDate } from './utils/getDate';
 import { showGoals } from './scripts/showGoals';
-import { createNewGoalController, deleteGoalController, updateGoalByNameController, updateGoalFailureByNameController } from './controllers/goals.controllers';
 import { showHistoryController } from './controllers/logs_controller/queryLog.controller';
 import type { historyType } from './types/history.types';
+import { createNewGoalController } from './controllers/goalsController/createGoal.controller';
+import { deleteGoalController } from './controllers/goalsController/deleteGoal.controller';
+import { updateGoalByNameController, updateGoalFailureByNameController } from './controllers/goalsController/updateGoal.controller';
 
 const args = process.argv.slice(2);
 
