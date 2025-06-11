@@ -8,7 +8,8 @@ database.run(`
     target INTEGER NOT NULL, 
     created_at DATE NOT NULL,
     failures INTEGER NOT NULL DEFAULT 0,
-    last_failure DATE 
+    last_failure DATE, 
+    type TEXT
   )  
 `);
 
