@@ -11,8 +11,9 @@ export interface Goal {
   target: number;
   progress: number; 
   failures: number;
-  last_failure: Date;
-  created_at: Date; 
+  last_failure: string;
+  created_at: string; 
+  type: string;
 }; 
 
 export interface GoalProgress {

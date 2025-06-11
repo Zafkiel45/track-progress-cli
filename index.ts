@@ -1,6 +1,6 @@
 import './database/migrations/database.migrations';
 import { getDate } from './utils/getDate';
-import { showGoals } from './scripts/showGoals';
+import { showGoalsService } from './services/goalsService/showGoals.service';
 import { showHistoryController } from './controllers/logs_controller/queryLog.controller';
 import type { historyType } from './types/history.types';
 import { createNewGoalController } from './controllers/goalsController/createGoal.controller';
@@ -19,7 +19,7 @@ switch(args[0]) {
     });
   break
   case 'show-goals':
-    showGoals();
+    showGoalsService();
   break 
   case 'update-goal':
     updateGoalByNameController({name: args[1]})
