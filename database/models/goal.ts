@@ -2,6 +2,7 @@ export interface NewGoal {
   name: string; 
   target: number;
   created_at: string;
+  type: string
 };
 
 export interface Goal {

@@ -4,16 +4,18 @@ import { getDatetime } from "../../utils/getDate";
 import { formatTextForDatabase } from "../../utils/goals.utils";
 import { registerLogService } from "../logs_service/registerLog.services";
 
-export function createNewGoal({name, target, created_at}: NewGoal) {
+export function createNewGoal({name, target, created_at, type}: NewGoal) {
   const query = database.prepare(`
-    INSERT INTO goals (name, target, created_at) VALUES (@name, @target, @created_at)
+    INSERT INTO goals (name, target, created_at, type) 
+    VALUES (@name, @target, @created_at, @type)
   `);
 
   database.transaction(() => {
     query.run({
       name: formatTextForDatabase(name),
       target: target,
-      created_at: String(created_at)
+      created_at: String(created_at),
+      type,
     });
   })();
 

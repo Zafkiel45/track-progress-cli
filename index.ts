@@ -15,6 +15,7 @@ switch(args[0]) {
       name: args[1],
       target: parseInt(args[2]),
       created_at: getDate(),
+      type: args[3]
     });
   break
   case 'show-goals':
